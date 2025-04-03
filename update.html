@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Update VPN Data</h2>
+    
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="dump_text">Paste 'wg show all dump' output:</label>
+            <textarea id="dump_text" name="dump_text" rows="15" cols="100" required></textarea>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

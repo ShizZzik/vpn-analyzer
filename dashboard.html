@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Users Traffic Overview</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Received</th>
+                <th>Sent</th>
+                <th>Total</th>
+                <th>Endpoint</th>
+                <th>Last Seen</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in users %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('user_detail', user_id=data.user.id) }}">
+                        {{ data.user.name if data.user.name else data.user.public_key[:8] + '...' }}
+                    </a>
+                </td>
+                <td>{{ data.received|filesizeformat }}</td>
+                <td>{{ data.sent|filesizeformat }}</td>
+                <td>{{ (data.received + data.sent)|filesizeformat }}</td>
+                <td>{{ data.endpoint }}</td>
+                <td>{{ data.last_seen|datetimeformat }}</td>
+                <td>
+                    <a href="{{ url_for('edit_user', user_id=data.user.id) }}">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

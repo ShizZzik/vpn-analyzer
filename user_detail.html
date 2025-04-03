@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.name if user.name else user.public_key[:8] }} - VPN Traffic Analyzer{% endblock %}
+
+{% block content %}
+    <h2>User Details: {{ user.name if user.name else user.public_key[:8] + '...' }}</h2>
+    
+    <div class="user-info">
+        <p><strong>Public Key:</strong> {{ user.public_key }}</p>
+        {% if user.email %}<p><strong>Email:</strong> {{ user.email }}</p>{% endif %}
+        <p><strong>Registered:</strong> {{ user.created_at|datetimeformat }}</p>
+        
+        <div class="traffic-totals">
+            <h3>Total Traffic</h3>
+            <p>Received: {{ total_received|filesizeformat }}</p>
+            <p>Sent: {{ total_sent|filesizeformat }}</p>
+            <p>Combined: {{ (total_received + total_sent)|filesizeformat }}</p>
+        </div>
+        
+        <a href="{{ url_for('edit_user', user_id=user.id) }}" class="button">Edit User</a>
+    </div>
+    
+    <h3>Traffic History</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Received</th>
+                <th>Sent</th>
+                <th>Endpoint</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in traffic_data %}
+            <tr>
+                <td>{{ data.timestamp|datetimeformat }}</td>
+                <td>{{ data.received_bytes|filesizeformat }}</td>
+                <td>{{ data.sent_bytes|filesizeformat }}</td>
+                <td>{{ data.endpoint }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
